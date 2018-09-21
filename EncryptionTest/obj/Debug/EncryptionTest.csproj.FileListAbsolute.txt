@@ -1,0 +1,7 @@
+C:\Users\hautv\Documents\Visual Studio 2013\Projects\GuiThay\Encryption\EncryptionTest\bin\Debug\EncryptionTest.dll
+C:\Users\hautv\Documents\Visual Studio 2013\Projects\GuiThay\Encryption\EncryptionTest\bin\Debug\EncryptionTest.pdb
+C:\Users\hautv\Documents\Visual Studio 2013\Projects\GuiThay\Encryption\EncryptionTest\bin\Debug\Encryption.exe
+C:\Users\hautv\Documents\Visual Studio 2013\Projects\GuiThay\Encryption\EncryptionTest\bin\Debug\Encryption.pdb
+C:\Users\hautv\Documents\Visual Studio 2013\Projects\GuiThay\Encryption\EncryptionTest\obj\Debug\EncryptionTest.csprojResolveAssemblyReference.cache
+C:\Users\hautv\Documents\Visual Studio 2013\Projects\GuiThay\Encryption\EncryptionTest\obj\Debug\EncryptionTest.dll
+C:\Users\hautv\Documents\Visual Studio 2013\Projects\GuiThay\Encryption\EncryptionTest\obj\Debug\EncryptionTest.pdb
