@@ -14,7 +14,6 @@ namespace Encryption.Data
     {
         byte[] buffer;
         int bufferSize;
-        int numRead;
 
         public FileEncryptionHandle(){ }
 
@@ -48,13 +47,10 @@ namespace Encryption.Data
                         while (SourceReader.Read(buffer, 0, bufferSize - 1) != 0)
                         {
                             //BufferDebug.show("1", buffer);
-                            buffer = encryption.encrypt(buffer);
-                            //BufferDebug.show("2", buffer);
-                            //buffer = encryption.decrypt(buffer);
-                            //BufferDebug.show("3", buffer);
+                            encryption.encrypt(buffer).CopyTo(buffer,0);
                             //Console.WriteLine("\n" + Encoding.UTF8.GetString(buffer));
-                            DestinationWriter.Write(buffer, 0, buffer.Length);
-                            buffer = new byte[bufferSize];
+                            DestinationWriter.Write(buffer, 0, bufferSize);
+                            System.Array.Clear(buffer, 0, bufferSize);
                         }
                     }
                 }
@@ -90,21 +86,9 @@ namespace Encryption.Data
                     {
                         while (SourceReader.Read(buffer, 0, bufferSize) != 0)
                         {
-                            buffer = encryption.decrypt(buffer);
-                            try
-                            {
-                                //BufferDebug.show("BeforeDecrypt",buffer);
-                                DestinationWriter.Write(buffer, 0, bufferSize - 1);
-                            }
-                            catch (Exception e)
-                            {
-                                DestinationWriter.Write(buffer, 0, buffer.Length);
-                            }
-                            finally
-                            {
-                                BufferDebug.show("3", buffer);
-                                buffer = new byte[encryption.getKeySize() / 8];
-                            }
+                            encryption.decrypt(buffer).CopyTo(buffer,0);
+                            DestinationWriter.Write(buffer, 0, bufferSize - 1);
+                            System.Array.Clear(buffer, 0, bufferSize);
                         }
                     }
                 }

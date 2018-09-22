@@ -86,17 +86,12 @@ namespace Encryption.Interfaces
         #endregion
 
         #region KeyFromFile...
-        private string getDirectory(string filePath)
-        {
-            string dir = filePath.Substring(0, filePath.LastIndexOf('\\')) + "\\";
-            return dir;
-        }
         public bool readKeyStorage(string keyFile)
         {
-            keyFile = getDirectory(keyFile);
+            keyFile = FileUtil.getDirectory(keyFile) + "RSA.keystorage";
             try
             {
-                using (StreamReader sr = new StreamReader(keyFile + @"RSA.keystorage"))
+                using (StreamReader sr = new StreamReader(keyFile))
                 {
                     string line = sr.ReadToEnd();
                     string[] element = line.Split('\n');
@@ -123,10 +118,10 @@ namespace Encryption.Interfaces
 
         public bool writeKeyStorage(string keyFile)
         {
-            keyFile = getDirectory(keyFile);
+            keyFile = FileUtil.getDirectory(keyFile) + "RSA.keystorage";
             try
             {
-                using (StreamWriter ds = new StreamWriter(keyFile + @"RSA.keystorage"))
+                using (StreamWriter ds = new StreamWriter(keyFile))
                 {
                     ds.Write("PUBLIC_KEY:\n" + PUBLIC_KEY + "\nSECRET_KEY:\n" + SECRET_KEY + "\nN:\n" + N);
                 }
@@ -143,5 +138,6 @@ namespace Encryption.Interfaces
             return KEY_SIZE;
         }
         #endregion
+
     }
 }
