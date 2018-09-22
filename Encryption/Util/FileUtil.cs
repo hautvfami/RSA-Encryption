@@ -13,5 +13,12 @@ namespace Encryption.Util
             string dir = filePath.Substring(0, filePath.LastIndexOf('\\')) + "\\";
             return dir;
         }
+
+        public static string getFileName(string filePath)
+        {
+            string fileName = filePath.Substring(filePath.LastIndexOf('\\'));
+            return fileName;
+        }
+
     }
 }

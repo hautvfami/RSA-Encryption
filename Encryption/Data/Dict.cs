@@ -11,5 +11,8 @@ namespace Encryption.Data
         public static string FILE_NOT_FOUND = "File not found";
         public static string ENCRYPT_SUCCESSFUL = "Encrypt successful";
         public static string DECRYPT_SUCCESSFUL = "Decrypt successful";
+
+        public static string ENCRYPTING = "Encrypting...";
+        public static string DECRYPTING = "Decrypting...";
     }
 }

@@ -14,11 +14,6 @@ namespace Encryption.Util
         private static Random random = new Random();
 
         #region Extends Aglogrith
-        public static BigInteger fastExponent2(BigInteger a, BigInteger b, BigInteger c)
-        {
-            return BigInteger.ModPow(a, b, c);
-        }
-
         public static BigInteger fastExponent(BigInteger baseN, BigInteger index, BigInteger modulo)
         {
             BigInteger result = 1;
@@ -68,7 +63,7 @@ namespace Encryption.Util
                 bi = getRandomNumber(size);
                 i++;
             } while (!isPrime(bi, 10));
-            Console.WriteLine("KEY_SIZE = " + size + "|Loop in " + i + " round|" + "isPrime bi: " + bi);
+            Console.WriteLine("PRIME_SIZE = " + size + "|Loop in " + i + " round|" + "isPrime bi: " + bi);
             GC.Collect();
 
             return bi;
@@ -92,7 +87,6 @@ namespace Encryption.Util
 
         private static bool millerTest(BigInteger n, BigInteger d, BigInteger s)
         {
-            Random random = new Random();
             int sizeInt = 65000;    // Max random value
             if (n - 2 < sizeInt) sizeInt = (int)n;
             BigInteger a = (BigInteger)random.Next(2, sizeInt);
@@ -114,25 +108,17 @@ namespace Encryption.Util
         #region Random Number
         private static BigInteger getRandomNumber(int size)
         {
-            BigInteger randNum;
             BitArray bits;
             byte[] byteArray = new byte[size / 8];
             random.NextBytes(byteArray);
 
             bits = new BitArray(byteArray);
-            bits.Set(0, true);              // bit chan le
-            bits.Set(size - 1, true);       // bit lon nhat
+            bits.Set(0, true);              // parity bit
+            bits.Set(size - 2, true);       // greatest bit
+            bits.Set(size - 1, false);      // sign bit
             bits.CopyTo(byteArray, 0);
 
-            // size/8 + 1 bytes BigInteger
-            randNum = new BigInteger(addLastZeroByte(byteArray));
-            return randNum;
-        }
-
-        public static byte[] addLastZeroByte(byte[] byteArray)
-        {
-            byteArray = byteArray.Concat(new byte[] { 0 }).ToArray();
-            return byteArray;
+            return new BigInteger(byteArray);
         }
         #endregion
     }

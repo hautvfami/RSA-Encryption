@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 
 using Encryption.Util;
+using System.Globalization;
 
 namespace Encryption.Interfaces
 {
@@ -52,24 +53,20 @@ namespace Encryption.Interfaces
 
         public byte[] encrypt(byte[] plain)
         {
-            plain = MathUlti.addLastZeroByte(plain);
             BigInteger e = new BigInteger(plain);
-
             BigInteger c = MathUlti.fastExponent(e, PUBLIC_KEY, N);
-            byte[] temp2 = c.ToByteArray();
-            temp2 = temp2.Take(plain.Length).ToArray();
-            return temp2;
+            System.Array.Clear(plain, 0, plain.Length);
+            c.ToByteArray().CopyTo(plain, 0);
+            return plain;
         }
 
         public byte[] decrypt(byte[] crypt)
         {
-            crypt = MathUlti.addLastZeroByte(crypt);
             BigInteger c = new BigInteger(crypt);
-
             BigInteger e = MathUlti.fastExponent(c, SECRET_KEY, N);
-            byte[] temp2 = e.ToByteArray();
-            temp2 = temp2.Take(crypt.Length).ToArray();
-            return temp2;
+            System.Array.Clear(crypt, 0, crypt.Length);
+            e.ToByteArray().CopyTo(crypt, 0);
+            return crypt;
         }
 
         #region Generate Key
@@ -79,7 +76,7 @@ namespace Encryption.Interfaces
             q = MathUlti.generatePrime(KEY_SIZE/2);
             N = BigInteger.Multiply(p,q);
             n = BigInteger.Multiply(p - 1, q - 1);
-            PUBLIC_KEY = MathUlti.generatePrime(KEY_SIZE - 8);
+            PUBLIC_KEY = MathUlti.generatePrime(KEY_SIZE);
             SECRET_KEY = MathUlti.moduloInverse(PUBLIC_KEY, n);
             Console.WriteLine("\nN: " + N + "\nn: " + n + "\nPUBLIC_KEY: " + PUBLIC_KEY + "\nSECRET_KEY: " + SECRET_KEY + "\np: " + p + "\nq: " + q + "\nGCD(PK,SK):" + BigInteger.GreatestCommonDivisor(PUBLIC_KEY, n) + "\nn>PK? " + (n > PUBLIC_KEY).ToString() + "\n----------------------------");
         }
@@ -88,20 +85,19 @@ namespace Encryption.Interfaces
         #region KeyFromFile...
         public bool readKeyStorage(string keyFile)
         {
-            keyFile = FileUtil.getDirectory(keyFile) + "RSA.keystorage";
             try
             {
                 using (StreamReader sr = new StreamReader(keyFile))
                 {
                     string line = sr.ReadToEnd();
                     string[] element = line.Split('\n');
-                    for (int i = 0; i<element.Length; i++)
+                    for (int i = 0; i < element.Length; i++)
                     {
                         switch (element[i])
                         {
-                            case "PUBLIC_KEY:": PUBLIC_KEY = BigInteger.Parse(element[++i]); break;
-                            case "SECRET_KEY:": SECRET_KEY = BigInteger.Parse(element[++i]); break;
-                            case "N:": N = BigInteger.Parse(element[++i]); break;
+                            case "PUBLIC_KEY:": PUBLIC_KEY = BigInteger.Parse(element[++i], NumberStyles.AllowHexSpecifier); break;
+                            case "SECRET_KEY:": SECRET_KEY = BigInteger.Parse(element[++i], NumberStyles.AllowHexSpecifier); break;
+                            case "N:"         : N          = BigInteger.Parse(element[++i], NumberStyles.AllowHexSpecifier); break;
                         }
                     }
                     KEY_SIZE = (PUBLIC_KEY.ToByteArray().Length) * 8;
@@ -123,7 +119,11 @@ namespace Encryption.Interfaces
             {
                 using (StreamWriter ds = new StreamWriter(keyFile))
                 {
-                    ds.Write("PUBLIC_KEY:\n" + PUBLIC_KEY + "\nSECRET_KEY:\n" + SECRET_KEY + "\nN:\n" + N);
+                    ds.Write(
+                        "PUBLIC_KEY:\n"     + PUBLIC_KEY.ToString("X") + 
+                        "\nSECRET_KEY:\n"   + SECRET_KEY.ToString("X") + 
+                        "\nN:\n"            + N.ToString("X")
+                        );
                 }
                 return true;
             }

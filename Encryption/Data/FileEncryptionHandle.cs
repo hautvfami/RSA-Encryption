@@ -12,8 +12,8 @@ namespace Encryption.Data
 {
     class FileEncryptionHandle
     {
-        byte[] buffer;
-        int bufferSize;
+        private byte[] buffer;
+        private int bufferSize;
 
         public FileEncryptionHandle(){ }
 
@@ -80,9 +80,9 @@ namespace Encryption.Data
 
             try
             {
-                using (FileStream SourceReader = File.OpenRead(UserDirectory + ".encrypt"))
+                using (FileStream SourceReader = File.OpenRead(UserDirectory))
                 {
-                    using (FileStream DestinationWriter = File.OpenWrite(reverseFileName(UserDirectory)))
+                    using (FileStream DestinationWriter = File.OpenWrite(UserDirectory.Substring(0, UserDirectory.LastIndexOf("."))))
                     {
                         while (SourceReader.Read(buffer, 0, bufferSize) != 0)
                         {
@@ -92,7 +92,7 @@ namespace Encryption.Data
                         }
                     }
                 }
-                System.IO.File.Delete(UserDirectory + ".encrypt");
+                System.IO.File.Delete(UserDirectory);
                 return true;
                 GC.Collect();
             }
@@ -101,14 +101,5 @@ namespace Encryption.Data
                 return false;
             }
         }
-
-        public string reverseFileName(string filePath)
-        {
-            string dir = filePath.Substring(0, filePath.LastIndexOf('\\'));
-            string fileName = filePath.Substring(filePath.LastIndexOf('\\'), filePath.Length - dir.Length);
-            fileName = fileName.Replace(".encrypt", " ");
-            return dir + fileName;
-        }
-
     }
 }
