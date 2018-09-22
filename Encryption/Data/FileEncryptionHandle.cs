@@ -13,10 +13,12 @@ namespace Encryption.Data
     class FileEncryptionHandle
     {
         byte[] buffer;
-        byte[] bufferWrite;
+        int bufferSize;
         int numRead;
 
-        public void EncryptFile(string UserDirectory, IEncryption encryption)
+        public FileEncryptionHandle(){ }
+
+        public bool EncryptFile(string UserDirectory, IEncryption encryption)
         {
             #region Comment
             //string[] lines = File.ReadAllLines(UserDirectory + "phising.txt", Encoding.UTF8);
@@ -34,29 +36,39 @@ namespace Encryption.Data
             //oFileStream.Write(encryptedBytes, 0, encryptedBytes.Length);
             //oFileStream.Close();
             #endregion
+            bufferSize = encryption.getKeySize() / 8;
+            buffer = new byte[bufferSize];
 
-            buffer = new byte[encryption.getKeySize() / 8];
-            using (FileStream SourceReader = File.OpenRead(UserDirectory + "phising.txt"))
+            try
             {
-                using (FileStream DestinationWriter = File.OpenWrite(UserDirectory + "phising.encrypt.txt"))
+                using (FileStream SourceReader = File.OpenRead(UserDirectory))
                 {
-                    while (SourceReader.Read(buffer, 0, buffer.Length - 1) != 0)
+                    using (FileStream DestinationWriter = File.OpenWrite(UserDirectory + ".encrypt"))
                     {
-                        //BufferDebug.show("1", buffer);
-                        buffer = encryption.encrypt(buffer);
-                        //BufferDebug.show("2", buffer);
-                        //buffer = encryption.decrypt(buffer);
-                        //BufferDebug.show("3", buffer);
-                        Console.WriteLine("\n" + Encoding.UTF8.GetString(buffer));
-                        DestinationWriter.Write(buffer, 0, buffer.Length);
-                        buffer = new byte[encryption.getKeySize() / 8];
+                        while (SourceReader.Read(buffer, 0, bufferSize - 1) != 0)
+                        {
+                            //BufferDebug.show("1", buffer);
+                            buffer = encryption.encrypt(buffer);
+                            //BufferDebug.show("2", buffer);
+                            //buffer = encryption.decrypt(buffer);
+                            //BufferDebug.show("3", buffer);
+                            //Console.WriteLine("\n" + Encoding.UTF8.GetString(buffer));
+                            DestinationWriter.Write(buffer, 0, buffer.Length);
+                            buffer = new byte[bufferSize];
+                        }
                     }
                 }
+                System.IO.File.Delete(UserDirectory);
+                return true;
+                GC.Collect();
             }
-            GC.Collect();
+            catch (IOException e)
+            {
+                return false;
+            }
         }
 
-        public void DecryptFile(string UserDirectory, IEncryption encryption)
+        public bool DecryptFile(string UserDirectory, IEncryption encryption)
         {
             #region Comment
             //byte[] byteData1 = File.ReadAllBytes(UserDirectory + "phising.encrypt.txt");
@@ -67,24 +79,51 @@ namespace Encryption.Data
             //oFileStream.Write(byteData, 0, byteData.Length);
             //oFileStream.Close();
             #endregion
+            bufferSize = encryption.getKeySize() / 8;
+            buffer = new byte[bufferSize];
 
-            buffer = new byte[encryption.getKeySize() / 8];
-            using (FileStream SourceReader = File.OpenRead(UserDirectory + "phising.encrypt.txt"))
+            try
             {
-                using (FileStream DestinationWriter = File.OpenWrite(UserDirectory + "phising.decrypt.txt"))
+                using (FileStream SourceReader = File.OpenRead(UserDirectory + ".encrypt"))
                 {
-                    while (SourceReader.Read(buffer, 0, buffer.Length) != 0)
+                    using (FileStream DestinationWriter = File.OpenWrite(reverseFileName(UserDirectory)))
                     {
-                        //BufferDebug.show("BeforeDecrypt",buffer);
-                        buffer = encryption.decrypt(buffer);
-                        //BufferDebug.show("AfterDecrypt",buffer);
-                        DestinationWriter.Write(buffer, 0, buffer.Length);
-                        //Console.WriteLine(Encoding.UTF8.GetString(buffer));
-                        buffer = new byte[encryption.getKeySize() / 8];
+                        while (SourceReader.Read(buffer, 0, bufferSize) != 0)
+                        {
+                            buffer = encryption.decrypt(buffer);
+                            try
+                            {
+                                //BufferDebug.show("BeforeDecrypt",buffer);
+                                DestinationWriter.Write(buffer, 0, bufferSize - 1);
+                            }
+                            catch (Exception e)
+                            {
+                                DestinationWriter.Write(buffer, 0, buffer.Length);
+                            }
+                            finally
+                            {
+                                BufferDebug.show("3", buffer);
+                                buffer = new byte[encryption.getKeySize() / 8];
+                            }
+                        }
                     }
                 }
+                System.IO.File.Delete(UserDirectory + ".encrypt");
+                return true;
+                GC.Collect();
             }
-            GC.Collect();
+            catch (IOException e)
+            {
+                return false;
+            }
+        }
+
+        public string reverseFileName(string filePath)
+        {
+            string dir = filePath.Substring(0, filePath.LastIndexOf('\\'));
+            string fileName = filePath.Substring(filePath.LastIndexOf('\\'), filePath.Length - dir.Length);
+            fileName = fileName.Replace(".encrypt", " ");
+            return dir + fileName;
         }
 
     }

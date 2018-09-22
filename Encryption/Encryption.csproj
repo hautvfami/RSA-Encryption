@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Consts.cs" />
+    <Compile Include="Data\Dict.cs" />
     <Compile Include="Data\FileEncryptionHandle.cs" />
     <Compile Include="Data\KeyStorage.cs" />
     <Compile Include="MainForm.cs">

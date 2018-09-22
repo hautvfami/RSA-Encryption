@@ -15,7 +15,7 @@ namespace Encryption
 {
     public partial class MainForm : Form
     {
-        string fileLocation = @"C:\Users\hautv\Desktop\";
+        string fileLocation = @"C:\Users\hautv\Desktop\phising.txt";
         RSA rsa;
         FileEncryptionHandle fileHandle;
 
@@ -27,7 +27,7 @@ namespace Encryption
 
         private void initData()
         {
-            rsa = new RSA(fileLocation, Consts.KEY_SIZE_512);
+            rsa = new RSA(fileLocation, Consts.KEY_SIZE_1024);
             fileHandle = new FileEncryptionHandle();
             textBox1.Text = rsa.PUBLIC_KEY.ToString();
         }
@@ -39,14 +39,36 @@ namespace Encryption
 
         private void btnEncrypt_Click(object sender, EventArgs e)
         {
-            fileHandle.EncryptFile(fileLocation, rsa);
-            textBox1.Text = "Encrypt Successful!";
+            if (fileHandle.EncryptFile(fileLocation, rsa))
+            {
+                status.Text = Dict.ENCRYPT_SUCCESSFUL;
+            }
+            else
+            {
+                status.Text = Dict.FILE_NOT_FOUND;
+            }
         }
 
         private void btnDecrypt_Click(object sender, EventArgs e)
         {
-            fileHandle.DecryptFile(fileLocation, rsa);
-            textBox1.Text = "Decrypt Successful!";
+            if (fileHandle.DecryptFile(fileLocation, rsa))
+            {
+                status.Text = Dict.DECRYPT_SUCCESSFUL;
+            }
+            else
+            {
+                status.Text = Dict.FILE_NOT_FOUND;
+            }
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void status_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

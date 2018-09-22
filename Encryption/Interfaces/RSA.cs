@@ -38,7 +38,7 @@ namespace Encryption.Interfaces
             {
                 KEY_SIZE = keySize;
                 generateKeyPair();
-                //writeKeyStorage(keyFile);
+                writeKeyStorage(keyFile);
             }
         }
 
@@ -86,8 +86,14 @@ namespace Encryption.Interfaces
         #endregion
 
         #region KeyFromFile...
+        private string getDirectory(string filePath)
+        {
+            string dir = filePath.Substring(0, filePath.LastIndexOf('\\')) + "\\";
+            return dir;
+        }
         public bool readKeyStorage(string keyFile)
         {
+            keyFile = getDirectory(keyFile);
             try
             {
                 using (StreamReader sr = new StreamReader(keyFile + @"RSA.keystorage"))
@@ -103,7 +109,7 @@ namespace Encryption.Interfaces
                             case "N:": N = BigInteger.Parse(element[++i]); break;
                         }
                     }
-                    KEY_SIZE = (PUBLIC_KEY.ToByteArray().Length - 1) * 8;
+                    KEY_SIZE = (PUBLIC_KEY.ToByteArray().Length) * 8;
                 }
                 Console.WriteLine("N: " + N + "\nPUBLIC_KEY: " + PUBLIC_KEY + "\nSECRET_KEY: " + SECRET_KEY + "\nKEY_SIZE: " + KEY_SIZE);
                 return true;
@@ -117,6 +123,7 @@ namespace Encryption.Interfaces
 
         public bool writeKeyStorage(string keyFile)
         {
+            keyFile = getDirectory(keyFile);
             try
             {
                 using (StreamWriter ds = new StreamWriter(keyFile + @"RSA.keystorage"))
