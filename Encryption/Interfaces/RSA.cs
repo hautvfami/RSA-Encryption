@@ -33,14 +33,20 @@ namespace Encryption.Interfaces
         #region Constructor...
         public RSA() { }
 
-        public RSA(string keyFile, int keySize = Consts.KEY_SIZE_32)
+        public RSA(string keyFile)
         {
             if (!readKeyStorage(keyFile))
             {
-                KEY_SIZE = keySize;
+                KEY_SIZE = Consts.KEY_SIZE_1024;
                 generateKeyPair();
                 writeKeyStorage(keyFile);
             }
+        }
+
+        public RSA(string keyFile, int keySize = Consts.KEY_SIZE_32){
+            KEY_SIZE = keySize;
+            generateKeyPair();
+            writeKeyStorage(keyFile);
         }
 
         public RSA(BigInteger PUBLIC_KEY_, BigInteger SECRET_KEY_, BigInteger N_)
@@ -72,13 +78,18 @@ namespace Encryption.Interfaces
         #region Generate Key
         private void generateKeyPair()
         {
-            p = MathUlti.generatePrime(KEY_SIZE/2);
-            q = MathUlti.generatePrime(KEY_SIZE/2);
-            N = BigInteger.Multiply(p,q);
+            p = MathUlti.generatePrime(KEY_SIZE / 2);
+            q = MathUlti.generatePrime(KEY_SIZE / 2);
+            N = BigInteger.Multiply(p, q);
             n = BigInteger.Multiply(p - 1, q - 1);
             PUBLIC_KEY = MathUlti.generatePrime(KEY_SIZE);
             SECRET_KEY = MathUlti.moduloInverse(PUBLIC_KEY, n);
-            Console.WriteLine("\nN: " + N + "\nn: " + n + "\nPUBLIC_KEY: " + PUBLIC_KEY + "\nSECRET_KEY: " + SECRET_KEY + "\np: " + p + "\nq: " + q + "\nGCD(PK,SK):" + BigInteger.GreatestCommonDivisor(PUBLIC_KEY, n) + "\nn>PK? " + (n > PUBLIC_KEY).ToString() + "\n----------------------------");
+            Debug.showLog("N", N);
+            Debug.showLog("n", n);
+            Debug.showLog("p", p);
+            Debug.showLog("q", q);
+            Debug.showLog("PUBLIC_KEY", PUBLIC_KEY);
+            Debug.showLog("SECRET_KEY", SECRET_KEY);
         }
         #endregion
 
@@ -97,17 +108,22 @@ namespace Encryption.Interfaces
                         {
                             case "PUBLIC_KEY:": PUBLIC_KEY = BigInteger.Parse(element[++i], NumberStyles.AllowHexSpecifier); break;
                             case "SECRET_KEY:": SECRET_KEY = BigInteger.Parse(element[++i], NumberStyles.AllowHexSpecifier); break;
-                            case "N:"         : N          = BigInteger.Parse(element[++i], NumberStyles.AllowHexSpecifier); break;
+                            case "N:": N = BigInteger.Parse(element[++i], NumberStyles.AllowHexSpecifier); break;
                         }
                     }
                     KEY_SIZE = (PUBLIC_KEY.ToByteArray().Length) * 8;
                 }
-                Console.WriteLine("N: " + N + "\nPUBLIC_KEY: " + PUBLIC_KEY + "\nSECRET_KEY: " + SECRET_KEY + "\nKEY_SIZE: " + KEY_SIZE);
+
+                Debug.showLog("N", N);
+                Debug.showLog("KEY_SIZE", KEY_SIZE);
+                Debug.showLog("PUBLIC_KEY", PUBLIC_KEY);
+                Debug.showLog("SECRET_KEY", SECRET_KEY);
+
                 return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Debug.showLog("func readKeyStorage", e.Message);
                 return false;
             }
         }
@@ -120,21 +136,22 @@ namespace Encryption.Interfaces
                 using (StreamWriter ds = new StreamWriter(keyFile))
                 {
                     ds.Write(
-                        "PUBLIC_KEY:\n"     + PUBLIC_KEY.ToString("X") + 
-                        "\nSECRET_KEY:\n"   + SECRET_KEY.ToString("X") + 
-                        "\nN:\n"            + N.ToString("X")
+                        "PUBLIC_KEY:\n" + PUBLIC_KEY.ToString("X") +
+                        "\nSECRET_KEY:\n" + SECRET_KEY.ToString("X") +
+                        "\nN:\n" + N.ToString("X")
                         );
                 }
                 return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Debug.showLog("func writeKeyStorage", e.Message);
                 return false;
             }
         }
 
-        public int getKeySize(){
+        public int getKeySize()
+        {
             return KEY_SIZE;
         }
         #endregion

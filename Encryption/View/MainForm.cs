@@ -1,5 +1,6 @@
 ﻿using Encryption.Data;
 using Encryption.Interfaces;
+using Encryption.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,6 +29,20 @@ namespace Encryption
         {
             rsa = new RSA();
             fileHandle = new FileEncryptionHandle();
+            initCbbKey();
+        }
+
+        private void initCbbKey()
+        {
+            cbbKeySize.Items.Insert(0, Consts.KEY_SIZE_16);
+            cbbKeySize.Items.Insert(1, Consts.KEY_SIZE_32);
+            cbbKeySize.Items.Insert(2, Consts.KEY_SIZE_64);
+            cbbKeySize.Items.Insert(3, Consts.KEY_SIZE_128);
+            cbbKeySize.Items.Insert(4, Consts.KEY_SIZE_256);
+            cbbKeySize.Items.Insert(5, Consts.KEY_SIZE_512);
+            cbbKeySize.Items.Insert(6, Consts.KEY_SIZE_1024);
+            cbbKeySize.Items.Insert(7, Consts.KEY_SIZE_2048);
+            cbbKeySize.SelectedIndex = 6;
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -40,13 +55,15 @@ namespace Encryption
             if (txtTargetPath.Text != "" && txtKeyPath.Text != "")
             {
                 status.Text = Dict.ENCRYPTING;
+                Debug.showTime("Begin");
 
-                if (fileHandle.EncryptFile(txtTargetPath.Text, rsa))
+                if (fileHandle.encryptFile(txtTargetPath.Text, rsa))
                 {
                     status.Text = Dict.ENCRYPT_SUCCESSFUL;
-                    txtTargetPath.Text += ".encrypt";
+                    txtTargetPath.Text += Consts.ENCRYPT_FILE_NAME;
                 }
                 else { status.Text = Dict.FILE_NOT_FOUND; }
+                Debug.showTime("End");
             }
         }
 
@@ -56,7 +73,7 @@ namespace Encryption
             {
                 status.Text = Dict.DECRYPTING;
 
-                if (fileHandle.DecryptFile(txtTargetPath.Text, rsa))
+                if (fileHandle.decryptFile(txtTargetPath.Text, rsa))
                 {
                     status.Text = Dict.DECRYPT_SUCCESSFUL;
                     txtTargetPath.Text = txtTargetPath.Text.Substring(0, txtTargetPath.Text.LastIndexOf("."));
@@ -68,8 +85,8 @@ namespace Encryption
         private void btnKey_Click(object sender, EventArgs e)
         {
             OpenFileDialog fd = new OpenFileDialog();
-            fd.Filter = "*Key File | *.keystorage";
-            fd.Title = "Select a Key File";
+            fd.Filter = Consts.DIALOG_KEY_FILTER;
+            fd.Title = Dict.SELECT_KEY_FILE;
 
             if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -80,7 +97,7 @@ namespace Encryption
         private void btnTarget_Click(object sender, EventArgs e)
         {
             OpenFileDialog fd = new OpenFileDialog();
-            fd.Title = "Select a Target File";
+            fd.Title = Dict.SELECT_TARGET_FILE;
 
             if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -91,7 +108,8 @@ namespace Encryption
         private void txtKeyPath_TextChanged(object sender, EventArgs e)
         {
             rsa.readKeyStorage(txtKeyPath.Text);
-            textBox1.Text = rsa.PUBLIC_KEY.ToString("X");
+            txtPK.Text = rsa.PUBLIC_KEY.ToString("X");
+            txtN.Text = rsa.N.ToString("X");
         }
 
         private void cbbKeySize_SelectedIndexChanged(object sender, EventArgs e)
@@ -107,6 +125,31 @@ namespace Encryption
         private void label2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnGenKey_Click(object sender, EventArgs e)
+        {
+            string targetPath = txtTargetPath.Text;
+            int keySize = Int16.Parse(cbbKeySize.SelectedItem.ToString());
+            Debug.showLog("genKey", targetPath + "|" + keySize);
+
+            if (targetPath != Consts.EMPTY && keySize / 8 != 0)
+            {
+                rsa = new RSA(targetPath, keySize);
+                txtPK.Text = rsa.PUBLIC_KEY.ToString("X");
+                txtN.Text = rsa.N.ToString("X");
+
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnMini_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
         }
     }
 }

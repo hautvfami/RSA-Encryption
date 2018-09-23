@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            this.txtPK = new System.Windows.Forms.TextBox();
             this.btnEncrypt = new System.Windows.Forms.Button();
             this.btnDecrypt = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -40,28 +41,33 @@
             this.btnVerify = new System.Windows.Forms.Button();
             this.btnSign = new System.Windows.Forms.Button();
             this.cbbKeySize = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txtN = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.status = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.btnMini = new System.Windows.Forms.Button();
+            this.btnClose = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // textBox1
+            // txtPK
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 138);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(505, 34);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.txtPK.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtPK.Cursor = System.Windows.Forms.Cursors.No;
+            this.txtPK.Enabled = false;
+            this.txtPK.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPK.Location = new System.Drawing.Point(12, 179);
+            this.txtPK.Multiline = true;
+            this.txtPK.Name = "txtPK";
+            this.txtPK.Size = new System.Drawing.Size(505, 60);
+            this.txtPK.TabIndex = 0;
+            this.txtPK.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // btnEncrypt
             // 
-            this.btnEncrypt.Location = new System.Drawing.Point(12, 12);
+            this.btnEncrypt.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEncrypt.Location = new System.Drawing.Point(12, 42);
             this.btnEncrypt.Name = "btnEncrypt";
             this.btnEncrypt.Size = new System.Drawing.Size(75, 23);
             this.btnEncrypt.TabIndex = 1;
@@ -71,7 +77,8 @@
             // 
             // btnDecrypt
             // 
-            this.btnDecrypt.Location = new System.Drawing.Point(12, 41);
+            this.btnDecrypt.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDecrypt.Location = new System.Drawing.Point(12, 67);
             this.btnDecrypt.Name = "btnDecrypt";
             this.btnDecrypt.Size = new System.Drawing.Size(75, 23);
             this.btnDecrypt.TabIndex = 2;
@@ -82,43 +89,51 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(13, 119);
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Consolas", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Cornsilk;
+            this.label1.Location = new System.Drawing.Point(13, 160);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(69, 13);
+            this.label1.Size = new System.Drawing.Size(77, 15);
             this.label1.TabIndex = 3;
             this.label1.Text = "PUBLIC KEY";
             // 
             // btnKey
             // 
             this.btnKey.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnKey.Location = new System.Drawing.Point(442, 10);
+            this.btnKey.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnKey.Location = new System.Drawing.Point(441, 42);
             this.btnKey.Name = "btnKey";
             this.btnKey.Size = new System.Drawing.Size(75, 23);
             this.btnKey.TabIndex = 6;
-            this.btnKey.Text = "Browser Key";
+            this.btnKey.Text = "Key";
             this.btnKey.UseVisualStyleBackColor = true;
             this.btnKey.Click += new System.EventHandler(this.btnKey_Click);
             // 
             // txtKeyPath
             // 
-            this.txtKeyPath.Location = new System.Drawing.Point(167, 12);
+            this.txtKeyPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtKeyPath.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtKeyPath.Location = new System.Drawing.Point(167, 42);
             this.txtKeyPath.Name = "txtKeyPath";
-            this.txtKeyPath.Size = new System.Drawing.Size(272, 20);
+            this.txtKeyPath.Size = new System.Drawing.Size(272, 22);
             this.txtKeyPath.TabIndex = 7;
             this.txtKeyPath.TextChanged += new System.EventHandler(this.txtKeyPath_TextChanged);
             // 
             // txtTargetPath
             // 
-            this.txtTargetPath.Location = new System.Drawing.Point(167, 37);
+            this.txtTargetPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtTargetPath.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTargetPath.Location = new System.Drawing.Point(167, 68);
             this.txtTargetPath.Name = "txtTargetPath";
-            this.txtTargetPath.Size = new System.Drawing.Size(272, 20);
+            this.txtTargetPath.Size = new System.Drawing.Size(272, 22);
             this.txtTargetPath.TabIndex = 9;
             // 
             // btnTarget
             // 
             this.btnTarget.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnTarget.Location = new System.Drawing.Point(442, 35);
+            this.btnTarget.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTarget.Location = new System.Drawing.Point(441, 67);
             this.btnTarget.Name = "btnTarget";
             this.btnTarget.Size = new System.Drawing.Size(75, 23);
             this.btnTarget.TabIndex = 8;
@@ -129,17 +144,20 @@
             // btnGenKey
             // 
             this.btnGenKey.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnGenKey.Location = new System.Drawing.Point(428, 72);
+            this.btnGenKey.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGenKey.Location = new System.Drawing.Point(410, 103);
             this.btnGenKey.Name = "btnGenKey";
-            this.btnGenKey.Size = new System.Drawing.Size(89, 23);
+            this.btnGenKey.Size = new System.Drawing.Size(107, 23);
             this.btnGenKey.TabIndex = 10;
             this.btnGenKey.Text = "Generate Key";
             this.btnGenKey.UseVisualStyleBackColor = true;
+            this.btnGenKey.Click += new System.EventHandler(this.btnGenKey_Click);
             // 
             // btnVerify
             // 
             this.btnVerify.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnVerify.Location = new System.Drawing.Point(362, 72);
+            this.btnVerify.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnVerify.Location = new System.Drawing.Point(344, 103);
             this.btnVerify.Name = "btnVerify";
             this.btnVerify.Size = new System.Drawing.Size(60, 23);
             this.btnVerify.TabIndex = 11;
@@ -148,98 +166,128 @@
             // 
             // btnSign
             // 
+            this.btnSign.BackColor = System.Drawing.SystemColors.Control;
             this.btnSign.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnSign.Location = new System.Drawing.Point(296, 72);
+            this.btnSign.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSign.Location = new System.Drawing.Point(278, 103);
             this.btnSign.Name = "btnSign";
             this.btnSign.Size = new System.Drawing.Size(60, 23);
             this.btnSign.TabIndex = 12;
             this.btnSign.Text = "Sign";
-            this.btnSign.UseVisualStyleBackColor = true;
+            this.btnSign.UseVisualStyleBackColor = false;
             // 
             // cbbKeySize
             // 
+            this.cbbKeySize.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbbKeySize.FormattingEnabled = true;
-            this.cbbKeySize.Location = new System.Drawing.Point(428, 101);
+            this.cbbKeySize.Location = new System.Drawing.Point(410, 132);
             this.cbbKeySize.Name = "cbbKeySize";
-            this.cbbKeySize.Size = new System.Drawing.Size(89, 21);
+            this.cbbKeySize.Size = new System.Drawing.Size(107, 22);
             this.cbbKeySize.TabIndex = 13;
             this.cbbKeySize.SelectedIndexChanged += new System.EventHandler(this.cbbKeySize_SelectedIndexChanged);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(13, 178);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(74, 13);
-            this.label3.TabIndex = 15;
-            this.label3.Text = "SECRET KEY";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(12, 197);
-            this.textBox2.Multiline = true;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(505, 34);
-            this.textBox2.TabIndex = 14;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(13, 240);
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Font = new System.Drawing.Font("Consolas", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.label4.Location = new System.Drawing.Point(13, 244);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(75, 13);
+            this.label4.Size = new System.Drawing.Size(77, 15);
             this.label4.TabIndex = 17;
-            this.label4.Text = "N__________";
+            this.label4.Text = "N         ";
             // 
-            // textBox3
+            // txtN
             // 
-            this.textBox3.Location = new System.Drawing.Point(12, 259);
-            this.textBox3.Multiline = true;
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(505, 34);
-            this.textBox3.TabIndex = 16;
+            this.txtN.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtN.Cursor = System.Windows.Forms.Cursors.No;
+            this.txtN.Enabled = false;
+            this.txtN.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtN.Location = new System.Drawing.Point(12, 264);
+            this.txtN.Multiline = true;
+            this.txtN.Name = "txtN";
+            this.txtN.Size = new System.Drawing.Size(505, 60);
+            this.txtN.TabIndex = 16;
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.panel1.BackColor = System.Drawing.SystemColors.GrayText;
+            this.panel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
+            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel1.Controls.Add(this.status);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(0, 296);
+            this.panel1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panel1.Location = new System.Drawing.Point(-4, 331);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(531, 22);
+            this.panel1.Size = new System.Drawing.Size(535, 24);
             this.panel1.TabIndex = 18;
             // 
             // status
             // 
             this.status.AutoSize = true;
-            this.status.Location = new System.Drawing.Point(72, 5);
+            this.status.BackColor = System.Drawing.Color.Transparent;
+            this.status.Location = new System.Drawing.Point(73, 3);
             this.status.Name = "status";
-            this.status.Size = new System.Drawing.Size(38, 13);
+            this.status.Size = new System.Drawing.Size(42, 14);
             this.status.TabIndex = 7;
             this.status.Text = "Ready";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 5);
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.Location = new System.Drawing.Point(13, 3);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 13);
+            this.label2.Size = new System.Drawing.Size(56, 14);
             this.label2.TabIndex = 6;
             this.label2.Text = "STATUS:";
             this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
+            // btnMini
+            // 
+            this.btnMini.BackColor = System.Drawing.Color.Transparent;
+            this.btnMini.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMini.BackgroundImage")));
+            this.btnMini.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnMini.FlatAppearance.BorderSize = 0;
+            this.btnMini.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.btnMini.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMini.ForeColor = System.Drawing.Color.Transparent;
+            this.btnMini.Location = new System.Drawing.Point(465, 5);
+            this.btnMini.Name = "btnMini";
+            this.btnMini.Size = new System.Drawing.Size(24, 23);
+            this.btnMini.TabIndex = 19;
+            this.btnMini.UseVisualStyleBackColor = false;
+            this.btnMini.Click += new System.EventHandler(this.btnMini_Click);
+            // 
+            // btnClose
+            // 
+            this.btnClose.BackColor = System.Drawing.Color.Transparent;
+            this.btnClose.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnClose.BackgroundImage")));
+            this.btnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnClose.FlatAppearance.BorderSize = 0;
+            this.btnClose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClose.ForeColor = System.Drawing.Color.Transparent;
+            this.btnClose.Location = new System.Drawing.Point(495, 5);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(24, 23);
+            this.btnClose.TabIndex = 20;
+            this.btnClose.UseVisualStyleBackColor = false;
+            this.btnClose.Click += new System.EventHandler(this.button2_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(529, 318);
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(529, 350);
+            this.Controls.Add(this.btnClose);
+            this.Controls.Add(this.btnMini);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.txtN);
             this.Controls.Add(this.cbbKeySize);
             this.Controls.Add(this.btnSign);
             this.Controls.Add(this.btnVerify);
@@ -251,8 +299,8 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnDecrypt);
             this.Controls.Add(this.btnEncrypt);
-            this.Controls.Add(this.textBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Controls.Add(this.txtPK);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MainForm";
             this.Opacity = 0.9D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -267,7 +315,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtPK;
         private System.Windows.Forms.Button btnEncrypt;
         private System.Windows.Forms.Button btnDecrypt;
         private System.Windows.Forms.Label label1;
@@ -279,13 +327,13 @@
         private System.Windows.Forms.Button btnVerify;
         private System.Windows.Forms.Button btnSign;
         private System.Windows.Forms.ComboBox cbbKeySize;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtN;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label status;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnMini;
+        private System.Windows.Forms.Button btnClose;
     }
 }
 

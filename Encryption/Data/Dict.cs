@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 
 namespace Encryption.Data
 {
-    class Dict
+    static class Dict
     {
-        public static string FILE_NOT_FOUND = "File not found";
-        public static string ENCRYPT_SUCCESSFUL = "Encrypt successful";
-        public static string DECRYPT_SUCCESSFUL = "Decrypt successful";
+        public const string FILE_NOT_FOUND = "File not found";
+        public const string ENCRYPT_SUCCESSFUL = "Encrypt successful";
+        public const string DECRYPT_SUCCESSFUL = "Decrypt successful";
 
-        public static string ENCRYPTING = "Encrypting...";
-        public static string DECRYPTING = "Decrypting...";
+        public const string ENCRYPTING = "Encrypting...";
+        public const string DECRYPTING = "Decrypting...";
+
+        public const string SELECT_KEY_FILE = "Select a Key File";
+        public const string SELECT_TARGET_FILE = "Select a Target File";
     }
 }

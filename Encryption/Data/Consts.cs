@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Encryption
 {
-    static class Consts
+    public static class Consts
     {
         /// <summary>
         /// Key size of Prime Number
@@ -20,6 +20,9 @@ namespace Encryption
         public const int KEY_SIZE_1024 = 1024;
         public const int KEY_SIZE_2048 = 2048;
 
+        public const string EMPTY = "";
+        public const string DIALOG_KEY_FILTER = "*Key File | *.keystorage";
+        public const string ENCRYPT_FILE_NAME = ".encrypt";
 
     }
 }
