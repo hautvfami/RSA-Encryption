@@ -49,8 +49,6 @@
     <Compile Include="Data\Dict.cs" />
     <Compile Include="Data\FileEncryptionHandle.cs" />
     <Compile Include="Data\KeyStorage.cs" />
-    <Compile Include="Interfaces\RSASignVerify.cs" />
-    <Compile Include="Util\TextUtil.cs" />
     <Compile Include="View\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -22,5 +22,15 @@ namespace Encryption.Interfaces
         {
             return 0;
         }
+
+        public bool sign(string filePath)
+        {
+            return true;
+        }
+
+        public bool verify(string filePath)
+        {
+            return true;
+        }
     }
 }

@@ -61,9 +61,6 @@
       <Name>Encryption</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="RSA.keystorage" />
-  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

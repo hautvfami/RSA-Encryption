@@ -62,7 +62,6 @@
             this.txtPK.Name = "txtPK";
             this.txtPK.Size = new System.Drawing.Size(505, 60);
             this.txtPK.TabIndex = 0;
-            this.txtPK.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // btnEncrypt
             // 
@@ -163,6 +162,7 @@
             this.btnVerify.TabIndex = 11;
             this.btnVerify.Text = "Verify";
             this.btnVerify.UseVisualStyleBackColor = true;
+            this.btnVerify.Click += new System.EventHandler(this.btnVerify_Click);
             // 
             // btnSign
             // 
@@ -175,6 +175,7 @@
             this.btnSign.TabIndex = 12;
             this.btnSign.Text = "Sign";
             this.btnSign.UseVisualStyleBackColor = false;
+            this.btnSign.Click += new System.EventHandler(this.btnSign_Click);
             // 
             // cbbKeySize
             // 
@@ -184,7 +185,6 @@
             this.cbbKeySize.Name = "cbbKeySize";
             this.cbbKeySize.Size = new System.Drawing.Size(107, 22);
             this.cbbKeySize.TabIndex = 13;
-            this.cbbKeySize.SelectedIndexChanged += new System.EventHandler(this.cbbKeySize_SelectedIndexChanged);
             // 
             // label4
             // 
@@ -242,7 +242,6 @@
             this.label2.Size = new System.Drawing.Size(56, 14);
             this.label2.TabIndex = 6;
             this.label2.Text = "STATUS:";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // btnMini
             // 
@@ -305,7 +304,6 @@
             this.Opacity = 0.9D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Encryption";
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);

@@ -8,6 +8,12 @@ namespace Encryption.Data
 {
     static class Dict
     {
+        public const string SIGN_SUCCESSFUL = "Sign successful";
+        public const string VERIFY_SUCCESSFUL = "Verify successful";
+
+        public const string SIGN_FAILED = "Sign failed";
+        public const string VERIFY_FAILED = "Verify failed";
+
         public const string FILE_NOT_FOUND = "File not found";
         public const string ENCRYPT_SUCCESSFUL = "Encrypt successful";
         public const string DECRYPT_SUCCESSFUL = "Decrypt successful";

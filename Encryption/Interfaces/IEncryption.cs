@@ -13,5 +13,8 @@ namespace Encryption.Interfaces
         int getKeySize();
         byte[] encrypt(byte[] plain);
         byte[] decrypt(byte[] plain);
+
+        bool sign(string filePath);
+        bool verify(string filePath);
     }
 }

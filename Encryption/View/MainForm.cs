@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -45,25 +46,30 @@ namespace Encryption
             cbbKeySize.SelectedIndex = 6;
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnEncrypt_Click(object sender, EventArgs e)
         {
             if (txtTargetPath.Text != "" && txtKeyPath.Text != "")
             {
                 status.Text = Dict.ENCRYPTING;
-                Debug.showTime("Begin");
-
-                if (fileHandle.encryptFile(txtTargetPath.Text, rsa))
+                Thread encrypting = new Thread(delegate()
                 {
-                    status.Text = Dict.ENCRYPT_SUCCESSFUL;
-                    txtTargetPath.Text += Consts.ENCRYPT_FILE_NAME;
-                }
-                else { status.Text = Dict.FILE_NOT_FOUND; }
-                Debug.showTime("End");
+                    fileHandle.encryptFile(txtTargetPath.Text, rsa);
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        txtTargetPath.Text += Consts.ENCRYPT_FILE_NAME;
+                        status.Text = Dict.ENCRYPT_SUCCESSFUL;
+                    });
+                });
+                encrypting.Priority = ThreadPriority.Highest;
+                encrypting.Start();
+                //Debug.showTime("Begin");
+                //if (fileHandle.encryptFile(txtTargetPath.Text, rsa))
+                //{
+                //    status.Text = Dict.ENCRYPT_SUCCESSFUL;
+                //    txtTargetPath.Text += Consts.ENCRYPT_FILE_NAME;
+                //}
+                //else { status.Text = Dict.FILE_NOT_FOUND; }
+                //Debug.showTime("End");
             }
         }
 
@@ -72,13 +78,24 @@ namespace Encryption
             if (txtTargetPath.Text != "" && txtKeyPath.Text != "")
             {
                 status.Text = Dict.DECRYPTING;
-
-                if (fileHandle.decryptFile(txtTargetPath.Text, rsa))
+                Thread decrypting = new Thread(delegate()
                 {
-                    status.Text = Dict.DECRYPT_SUCCESSFUL;
-                    txtTargetPath.Text = txtTargetPath.Text.Substring(0, txtTargetPath.Text.LastIndexOf("."));
-                }
-                else { status.Text = Dict.FILE_NOT_FOUND; }
+                    fileHandle.decryptFile(txtTargetPath.Text, rsa);
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        txtTargetPath.Text = txtTargetPath.Text.Substring(0, txtTargetPath.Text.LastIndexOf("."));
+                        status.Text = Dict.DECRYPT_SUCCESSFUL;
+                    });
+                });
+                decrypting.Priority = ThreadPriority.Highest;
+                decrypting.Start();
+
+                //if (fileHandle.decryptFile(txtTargetPath.Text, rsa))
+                //{
+                //    status.Text = Dict.DECRYPT_SUCCESSFUL;
+                //    txtTargetPath.Text = txtTargetPath.Text.Substring(0, txtTargetPath.Text.LastIndexOf("."));
+                //}
+                //else { status.Text = Dict.FILE_NOT_FOUND; }
             }
         }
 
@@ -112,21 +129,6 @@ namespace Encryption
             txtN.Text = rsa.N.ToString("X");
         }
 
-        private void cbbKeySize_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnGenKey_Click(object sender, EventArgs e)
         {
             string targetPath = txtTargetPath.Text;
@@ -150,6 +152,30 @@ namespace Encryption
         private void btnMini_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void btnSign_Click(object sender, EventArgs e)
+        {
+            if (rsa.sign(txtTargetPath.Text))
+            {
+                status.Text = Dict.SIGN_SUCCESSFUL;
+            }
+            else
+            {
+                status.Text = Dict.SIGN_FAILED;
+            }
+        }
+
+        private void btnVerify_Click(object sender, EventArgs e)
+        {
+            if (rsa.verify(txtTargetPath.Text))
+            {
+                status.Text = Dict.VERIFY_SUCCESSFUL;
+            }
+            else
+            {
+                status.Text = Dict.VERIFY_FAILED;
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 
 using Encryption.Util;
-using System.Globalization;
+using System.Globalization;                       
 
 namespace Encryption.Interfaces
 {
@@ -59,10 +59,17 @@ namespace Encryption.Interfaces
 
         public byte[] encrypt(byte[] plain)
         {
+            //System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
+            //Console.WriteLine("1\t" + sw.ElapsedMilliseconds);
             BigInteger e = new BigInteger(plain);
+            //Console.WriteLine("2\t" + sw.ElapsedMilliseconds);
             BigInteger c = MathUlti.fastExponent(e, PUBLIC_KEY, N);
+            //Console.WriteLine("3\t" + sw.ElapsedMilliseconds);
             System.Array.Clear(plain, 0, plain.Length);
+            //Console.WriteLine("4\t" + sw.ElapsedMilliseconds);
             c.ToByteArray().CopyTo(plain, 0);
+            //Console.WriteLine("5\t" + sw.ElapsedMilliseconds);
+            //sw.Stop();
             return plain;
         }
 
@@ -74,6 +81,53 @@ namespace Encryption.Interfaces
             e.ToByteArray().CopyTo(crypt, 0);
             return crypt;
         }
+
+        #region Sign-Verify
+        public bool verify(string filePath)
+        {
+            byte[] hash = new byte[KEY_SIZE / 8];
+            getHashSHA256(filePath).CopyTo(hash, 0);
+
+            byte[] sign = new byte[KEY_SIZE / 8];
+            using (Stream file = File.OpenRead(filePath + ".sign"))
+                file.Read(sign, 0, sign.Length);
+
+            byte[] signOrigin;
+            signOrigin = encrypt(sign);
+            //Debug.showBuffer("signOrigin",signOrigin);
+            if (new BigInteger(hash) == new BigInteger(signOrigin)) return true;
+            return false;
+        }
+
+        public bool sign(string filePath)
+        {
+            byte[] hash = new byte[KEY_SIZE / 8];
+            getHashSHA256(filePath).CopyTo(hash, 0);
+            try
+            {
+                byte[] sign = decrypt(hash);
+                using (Stream file = File.OpenWrite(filePath + ".sign"))
+                    file.Write(sign, 0, sign.Length);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.showLog("func sign", e.Message);
+                return false;
+            }
+        }
+
+        private byte[] getHashSHA256(string filePath)
+        {
+            byte[] hash;
+            SHA1Managed sha = new SHA1Managed();
+
+            using (Stream file = File.OpenRead(filePath))
+                hash = sha.ComputeHash(file);
+            Debug.showBuffer("Hash", hash);
+            return hash;
+        }
+        #endregion
 
         #region Generate Key
         private void generateKeyPair()
