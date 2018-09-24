@@ -496,35 +496,6 @@
         y4/bx3HvTVkQQgoKmP8fw/e2PuKx2P8AAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="btnMini.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABsAAAAaCAYAAABGiCfwAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1
-        MAAA6mAAADqYAAAXb5JfxUYAAAAJcEhZcwAACxMAAAsTAQCanBgAAAG/SURBVEhLxZYxT8JAGIYJiYmz
-        PwDRyTg7EoWW0biC/gljHGRydfEHuDkpkzqhVMXZxdnNRUZ1EDSFcJ7ve+0ROK6QFKzDQ5q7796H9nrX
-        S0kpE0P9HM7NR/JyupYBFeCBV+CDFngGdcC+JdtYzUQZAig5B733y5xs1/Kye+fIXqMIXOl7BdXGPtSI
-        sDZjyxorw6At8PlxtS7FQ1EKhIuGAwoGbEMfaliLMbzjbTMvUobiXSDatY0giKH3mrxB2K7Ervy+yVP4
-        A/YGM60yFJVY7Hv8xyBSYqKljuzcOlpYipShk3PU+rrG4L7IDJ1EIGQGs5gZJTtTc8RHF0ukodDVc1gd
-        kaFxEYjgZaBoWhlAFjOZbcoO3i5yM7grDYWuZCazTVmdayb+XJlQ5qh1yGxT1uSCDR6hbXAMkMVMZpsy
-        nzuDlj0dr8qT0kIsHo9W+jJmIrvzr7JEH6OX5AuS6KufBX+1qLNDsnC7qiayXYWyZDbizXRagc4ymNUn
-        pqxzrbJQOIuP5/5gZqSMoHiaY8GOmTdWRjCIc1gFYvTAU1TXbBs48LA2Y8uaKNMwAOijXBN0Q3jNNvYt
-        28ZqhmTJIFO/t3Hksb6eJHoAAAAASUVORK5CYII=
-</value>
-  </data>
-  <data name="btnClose.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABwAAAAbCAYAAABvCO8sAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1
-        MAAA6mAAADqYAAAXb5JfxUYAAAAJcEhZcwAACxMAAAsTAQCanBgAAAITSURBVEhLzZbNTgIxFIXZmLhH
-        48IEwcQ3MXEj/oAwgA9hjAtc+RK8gsgrAC/i0oVsNVEwgsxYzyktmSmXAUSIiy9ie+/5mGk7TEIptVbE
-        wVUiDlruNjY1T0eHKXALWuAZ9EEXPIIm4FzG1kvYzIjABSEUPQD/5TyresW8GpQLalgpaj5LFxjLKc6h
-        JjC1qV8J0XgC3l9zp8q/9JQPgQ+ZD0kEjnEONaxFD6+8vJAQDVcg6BVyo7CwwMtHCc+h9gNXjN5vcD2X
-        EIUeG/oMCF+RK3Kxdehhr5F6sUIUcM26/JZjmRQeh5GaK+Xt1Ws6TVjXa2ZvIwLamQNV39lVb2fZyXAD
-        51jDWj3GXmSYNW2IQkzsgUBvEDYYIYPQoGrJbVHKsVpyS9ewVo/bfmQxk9mSsMrtHb66UeDxONCVhmX8
-        G/lCzECWOTJVSdjkmZLWLiodBcfKCDOQxbOL7LYk7PBQuzKLK42VWZDFTGZLwj6fHtOEJCydKSPIGo7W
-        cfAvhGu/pS0u8PybZnIs3KMzkBW3aeY4FtHgWCkzZhyLNIg5+PKtC0tjDn56QmikDenRdo8gSWahlDUL
-        PdqMcL0Pb4KCEvirn6eSmx/5x4LCJX6A9a6k7EbKnhiwoGGZV4yKlEnEQQsauaYNEHB7j1+iEE74mWNm
-        63M3sjYlZVnEQReGAPua2AFfBn7mGOf2pV4XcXB1qMQPQ9h07XTS60QAAAAASUVORK5CYII=
-</value>
-  </data>
   <metadata name="$this.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>

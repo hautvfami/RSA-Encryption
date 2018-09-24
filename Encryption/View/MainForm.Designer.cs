@@ -246,7 +246,7 @@
             // btnMini
             // 
             this.btnMini.BackColor = System.Drawing.Color.Transparent;
-            this.btnMini.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMini.BackgroundImage")));
+            this.btnMini.BackgroundImage = global::Encryption.Properties.Resources.btnMini;
             this.btnMini.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnMini.FlatAppearance.BorderSize = 0;
             this.btnMini.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
@@ -262,7 +262,7 @@
             // btnClose
             // 
             this.btnClose.BackColor = System.Drawing.Color.Transparent;
-            this.btnClose.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnClose.BackgroundImage")));
+            this.btnClose.BackgroundImage = global::Encryption.Properties.Resources.btnClose;
             this.btnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnClose.FlatAppearance.BorderSize = 0;
             this.btnClose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;

@@ -94,6 +94,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resource\slider-security.jpg" />
+    <Content Include="Resource\btnClose.png" />
+    <Content Include="Resource\btnMini.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
