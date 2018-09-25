@@ -21,8 +21,8 @@ namespace Encryption.Interfaces
         private BigInteger p, q, n;
         public int KEY_SIZE;
 
-        //private static RSA instance;
         //#region Singeton
+        //private static RSA instance;
         //public static IEncryption getInstance()    // Singeton
         //{
         //    if (instance == null) instance = new RSA();
@@ -60,15 +60,15 @@ namespace Encryption.Interfaces
         public byte[] encrypt(byte[] plain)
         {
             //System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
-            //Console.WriteLine("1\t" + sw.ElapsedMilliseconds);
+            //Debug.showLog("1",sw.ElapsedMilliseconds);
             BigInteger e = new BigInteger(plain);
-            //Console.WriteLine("2\t" + sw.ElapsedMilliseconds);
+            //Debug.showLog("2", sw.ElapsedMilliseconds);
             BigInteger c = MathUlti.fastExponent(e, PUBLIC_KEY, N);
-            //Console.WriteLine("3\t" + sw.ElapsedMilliseconds);
+            //Debug.showLog("3", sw.ElapsedMilliseconds);
             System.Array.Clear(plain, 0, plain.Length);
-            //Console.WriteLine("4\t" + sw.ElapsedMilliseconds);
+            //Debug.showLog("4", sw.ElapsedMilliseconds);
             c.ToByteArray().CopyTo(plain, 0);
-            //Console.WriteLine("5\t" + sw.ElapsedMilliseconds);
+            //Debug.showLog("5", sw.ElapsedMilliseconds);
             //sw.Stop();
             return plain;
         }
@@ -94,7 +94,6 @@ namespace Encryption.Interfaces
 
             byte[] signOrigin;
             signOrigin = encrypt(sign);
-            //Debug.showBuffer("signOrigin",signOrigin);
             if (new BigInteger(hash) == new BigInteger(signOrigin)) return true;
             return false;
         }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.txtPK = new System.Windows.Forms.TextBox();
             this.btnEncrypt = new System.Windows.Forms.Button();
@@ -48,6 +49,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnMini = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
+            this.ttGenerateKey = new System.Windows.Forms.ToolTip(this.components);
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -275,6 +277,10 @@
             this.btnClose.UseVisualStyleBackColor = false;
             this.btnClose.Click += new System.EventHandler(this.button2_Click);
             // 
+            // ttGenerateKey
+            // 
+            this.ttGenerateKey.ToolTipTitle = "GUILD";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -332,6 +338,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnMini;
         private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.ToolTip ttGenerateKey;
     }
 }
 

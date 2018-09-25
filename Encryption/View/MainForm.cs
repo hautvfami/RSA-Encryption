@@ -30,10 +30,11 @@ namespace Encryption
         {
             rsa = new RSA();
             fileHandle = new FileEncryptionHandle();
-            initCbbKey();
+            initControlData();
+            initToolTip();
         }
 
-        private void initCbbKey()
+        private void initControlData()
         {
             cbbKeySize.Items.Insert(0, Consts.KEY_SIZE_16);
             cbbKeySize.Items.Insert(1, Consts.KEY_SIZE_32);
@@ -44,6 +45,13 @@ namespace Encryption
             cbbKeySize.Items.Insert(6, Consts.KEY_SIZE_1024);
             cbbKeySize.Items.Insert(7, Consts.KEY_SIZE_2048);
             cbbKeySize.SelectedIndex = 6;
+
+            txtTargetPath.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\";
+        }
+
+        private void initToolTip()
+        {
+            ttGenerateKey.SetToolTip(btnGenKey, "Select your taget, key's going to write in the same folder of target!");
         }
 
         private void btnEncrypt_Click(object sender, EventArgs e)
