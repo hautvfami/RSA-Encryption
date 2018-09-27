@@ -57,6 +57,10 @@ namespace Encryption.Interfaces
         }
         #endregion
 
+        public bool hasSecretKey()
+        {
+            return SECRET_KEY != 0 ? true : false;
+        }
         public byte[] encrypt(byte[] plain)
         {
             //System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
@@ -86,11 +90,17 @@ namespace Encryption.Interfaces
         public bool verify(string filePath)
         {
             byte[] hash = new byte[KEY_SIZE / 8];
-            getHashSHA256(filePath).CopyTo(hash, 0);
-
             byte[] sign = new byte[KEY_SIZE / 8];
-            using (Stream file = File.OpenRead(filePath + ".sign"))
-                file.Read(sign, 0, sign.Length);
+            try
+            {
+                getHashSHA256(filePath).CopyTo(hash, 0);
+                using (Stream file = File.OpenRead(filePath + ".sign"))
+                    file.Read(sign, 0, sign.Length);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
 
             byte[] signOrigin;
             signOrigin = encrypt(sign);
@@ -98,33 +108,34 @@ namespace Encryption.Interfaces
             return false;
         }
 
-        public bool sign(string filePath)
+        public bool sign (string filePath)
         {
             byte[] hash = new byte[KEY_SIZE / 8];
             getHashSHA256(filePath).CopyTo(hash, 0);
-            try
-            {
-                byte[] sign = decrypt(hash);
-                using (Stream file = File.OpenWrite(filePath + ".sign"))
-                    file.Write(sign, 0, sign.Length);
-                return true;
-            }
-            catch (Exception e)
-            {
-                Debug.showLog("func sign", e.Message);
-                return false;
-            }
+
+            byte[] sign = decrypt(hash);
+            using (Stream file = File.OpenWrite(filePath + ".sign"))
+                file.Write(sign, 0, sign.Length);
+            return true;
         }
 
         private byte[] getHashSHA256(string filePath)
         {
             byte[] hash;
             SHA1Managed sha = new SHA1Managed();
-
-            using (Stream file = File.OpenRead(filePath))
-                hash = sha.ComputeHash(file);
-            Debug.showBuffer("Hash", hash);
-            return hash;
+            try
+            {
+                using (Stream file = File.OpenRead(filePath))
+                    hash = sha.ComputeHash(file);
+                Debug.showBuffer("Hash", hash);
+                return hash;
+            }
+            catch (Exception e)
+            {
+                Debug.showLog("ERROR", e.Message);
+            }
+            return null;
+            
         }
         #endregion
 
@@ -135,12 +146,13 @@ namespace Encryption.Interfaces
             q = MathUlti.generatePrime(KEY_SIZE / 2);
             N = BigInteger.Multiply(p, q);
             n = BigInteger.Multiply(p - 1, q - 1);
-            PUBLIC_KEY = MathUlti.generatePrime(KEY_SIZE);
+            PUBLIC_KEY = 65537;//MathUlti.getPublicKey(KEY_SIZE, n);
             SECRET_KEY = MathUlti.moduloInverse(PUBLIC_KEY, n);
-            Debug.showLog("N", N);
-            Debug.showLog("n", n);
+
             Debug.showLog("p", p);
             Debug.showLog("q", q);
+            Debug.showLog("n", n);
+            Debug.showLog("N", N);
             Debug.showLog("PUBLIC_KEY", PUBLIC_KEY);
             Debug.showLog("SECRET_KEY", SECRET_KEY);
         }
@@ -154,7 +166,7 @@ namespace Encryption.Interfaces
                 using (StreamReader sr = new StreamReader(keyFile))
                 {
                     string line = sr.ReadToEnd();
-                    string[] element = line.Split('\n');
+                    string[] element = line.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
                     for (int i = 0; i < element.Length; i++)
                     {
                         switch (element[i])
@@ -164,7 +176,7 @@ namespace Encryption.Interfaces
                             case "N:": N = BigInteger.Parse(element[++i], NumberStyles.AllowHexSpecifier); break;
                         }
                     }
-                    KEY_SIZE = (PUBLIC_KEY.ToByteArray().Length) * 8;
+                    KEY_SIZE = (N.ToByteArray().Length) * 8;
                 }
 
                 Debug.showLog("N", N);
@@ -189,9 +201,9 @@ namespace Encryption.Interfaces
                 using (StreamWriter ds = new StreamWriter(keyFile))
                 {
                     ds.Write(
-                        "PUBLIC_KEY:\n" + PUBLIC_KEY.ToString("X") +
-                        "\nSECRET_KEY:\n" + SECRET_KEY.ToString("X") +
-                        "\nN:\n" + N.ToString("X")
+                        "PUBLIC_KEY:" + Environment.NewLine + PUBLIC_KEY.ToString("X") + Environment.NewLine +
+                        "SECRET_KEY:" + Environment.NewLine + SECRET_KEY.ToString("X") + Environment.NewLine +
+                        "N:"          + Environment.NewLine + N.ToString("X")
                         );
                 }
                 return true;

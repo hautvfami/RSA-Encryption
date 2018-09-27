@@ -14,13 +14,16 @@ namespace Encryption.Data
     {
         private byte[] buffer;
         private int bufferSize;
+        private long readed;
 
         public FileEncryptionHandle(){ }
 
-        public bool encryptFile(string UserDirectory, IEncryption encryption)
+        public bool encryptFile(string UserDirectory, IEncryption encryption, ref int progress)
         {
             bufferSize = encryption.getKeySize() / 8;
             buffer = new byte[bufferSize];
+            progress = 0;
+            readed = 0;
 
             try
             {
@@ -30,15 +33,17 @@ namespace Encryption.Data
                     {
                         while (SourceReader.Read(buffer, 0, bufferSize - 1) != 0)
                         {
-                            //Debug.showBuffer("1", buffer);
+                            // Count progress person
+                            readed += bufferSize - 1;
+                            progress = (int)(100.0 * readed / SourceReader.Length);
+
                             encryption.encrypt(buffer).CopyTo(buffer,0);
-                            //Debug.showLog("Text", Encoding.UTF8.GetString(buffer));
                             DestinationWriter.Write(buffer, 0, bufferSize);
                             System.Array.Clear(buffer, 0, bufferSize);
                         }
                     }
                 }
-                System.IO.File.Delete(UserDirectory);
+                //System.IO.File.Delete(UserDirectory);
                 GC.Collect();
                 return true;
             }
@@ -49,10 +54,12 @@ namespace Encryption.Data
             }
         }
 
-        public bool decryptFile(string UserDirectory, IEncryption encryption)
+        public bool decryptFile(string UserDirectory, IEncryption encryption, ref int progress)
         {
             bufferSize = encryption.getKeySize() / 8;
             buffer = new byte[bufferSize];
+            progress = 0;
+            readed = 0;
 
             try
             {
@@ -62,13 +69,17 @@ namespace Encryption.Data
                     {
                         while (SourceReader.Read(buffer, 0, bufferSize) != 0)
                         {
+                            // Count progress person
+                            readed += bufferSize;
+                            progress = (int)(100.0 * readed / SourceReader.Length);
+
                             encryption.decrypt(buffer).CopyTo(buffer,0);
                             DestinationWriter.Write(buffer, 0, bufferSize - 1);
                             System.Array.Clear(buffer, 0, bufferSize);
                         }
                     }
                 }
-                System.IO.File.Delete(UserDirectory);
+                //System.IO.File.Delete(UserDirectory);
                 GC.Collect();
                 return true;
             }

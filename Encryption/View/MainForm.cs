@@ -19,6 +19,7 @@ namespace Encryption
     {
         RSA rsa;
         FileEncryptionHandle fileHandle;
+        int progress;
 
         public MainForm()
         {
@@ -56,54 +57,70 @@ namespace Encryption
 
         private void btnEncrypt_Click(object sender, EventArgs e)
         {
-            if (txtTargetPath.Text != "" && txtKeyPath.Text != "")
+            if (txtTargetPath.Text != "" && rsa.PUBLIC_KEY != 0)
             {
-                status.Text = Dict.ENCRYPTING;
+                lbStatus.Text = Dict.ENCRYPTING;
+                timer1.Start();
                 Thread encrypting = new Thread(delegate()
                 {
-                    fileHandle.encryptFile(txtTargetPath.Text, rsa);
-                    this.Invoke((MethodInvoker)delegate()
+                    if (fileHandle.encryptFile(txtTargetPath.Text, rsa, ref progress))
                     {
-                        txtTargetPath.Text += Consts.ENCRYPT_FILE_NAME;
-                        status.Text = Dict.ENCRYPT_SUCCESSFUL;
-                    });
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            txtTargetPath.Text += Consts.ENCRYPT_FILE_NAME;
+                            lbStatus.Text = Dict.ENCRYPT_SUCCESSFUL;
+                        });
+                    }
+                    else
+                    {
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            lbStatus.Text = Dict.FILE_NOT_FOUND;
+                        });
+                    }
+                    timer1.Stop();
                 });
+
                 encrypting.Priority = ThreadPriority.Highest;
                 encrypting.Start();
-                //Debug.showTime("Begin");
-                //if (fileHandle.encryptFile(txtTargetPath.Text, rsa))
-                //{
-                //    status.Text = Dict.ENCRYPT_SUCCESSFUL;
-                //    txtTargetPath.Text += Consts.ENCRYPT_FILE_NAME;
-                //}
-                //else { status.Text = Dict.FILE_NOT_FOUND; }
-                //Debug.showTime("End");
+            }
+            else
+            {
+                lbStatus.Text = Dict.FILE_NOT_FOUND_OR_DONT_HAVE_PUBLIC_KEY;
             }
         }
 
         private void btnDecrypt_Click(object sender, EventArgs e)
         {
-            if (txtTargetPath.Text != "" && txtKeyPath.Text != "")
+            if (txtTargetPath.Text != Consts.EMPTY && rsa.hasSecretKey())
             {
-                status.Text = Dict.DECRYPTING;
+                lbStatus.Text = Dict.DECRYPTING;
+                timer1.Start();
                 Thread decrypting = new Thread(delegate()
                 {
-                    fileHandle.decryptFile(txtTargetPath.Text, rsa);
-                    this.Invoke((MethodInvoker)delegate()
+                    if (fileHandle.decryptFile(txtTargetPath.Text, rsa, ref progress))
                     {
-                        txtTargetPath.Text = txtTargetPath.Text.Substring(0, txtTargetPath.Text.LastIndexOf("."));
-                        status.Text = Dict.DECRYPT_SUCCESSFUL;
-                    });
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            txtTargetPath.Text = txtTargetPath.Text.Substring(0, txtTargetPath.Text.LastIndexOf("."));
+                            lbStatus.Text = Dict.DECRYPT_SUCCESSFUL;
+                        });
+                    }
+                    else
+                    {
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            lbStatus.Text = Dict.FILE_NOT_FOUND;
+                        });
+                    }
+                    timer1.Stop();
                 });
                 decrypting.Priority = ThreadPriority.Highest;
                 decrypting.Start();
-
-                //if (fileHandle.decryptFile(txtTargetPath.Text, rsa))
-                //{
-                //    status.Text = Dict.DECRYPT_SUCCESSFUL;
-                //    txtTargetPath.Text = txtTargetPath.Text.Substring(0, txtTargetPath.Text.LastIndexOf("."));
-                //}
-                //else { status.Text = Dict.FILE_NOT_FOUND; }
+            }
+            else
+            {
+                lbStatus.Text = Dict.FILE_NOT_FOUND_OR_DONT_HAVE_SECRET_KEY;
             }
         }
 
@@ -139,20 +156,34 @@ namespace Encryption
 
         private void btnGenKey_Click(object sender, EventArgs e)
         {
-            string targetPath = txtTargetPath.Text;
+            string targetPath = "";
             int keySize = Int16.Parse(cbbKeySize.SelectedItem.ToString());
-            Debug.showLog("genKey", targetPath + "|" + keySize);
+            FolderBrowserDialog fd = new FolderBrowserDialog();
+
+            // Select folder to save Key
+            fd.Description = Dict.SELECT_TARGET_FOLDER;
+            if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                targetPath = fd.SelectedPath;
 
             if (targetPath != Consts.EMPTY && keySize / 8 != 0)
             {
-                rsa = new RSA(targetPath, keySize);
-                txtPK.Text = rsa.PUBLIC_KEY.ToString("X");
-                txtN.Text = rsa.N.ToString("X");
-
+                lbStatus.Text = Dict.GENERATING;
+                Debug.showLog("genKey", targetPath + "|" + keySize);
+                // Gen key
+                Thread genKey = new Thread(delegate() {
+                    rsa = new RSA(targetPath + "\\", keySize);
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        txtPK.Text = rsa.PUBLIC_KEY.ToString("X");
+                        txtN.Text = rsa.N.ToString("X");
+                        lbStatus.Text = Dict.GENERATE_KEY_COMPLETED;
+                    });
+                });
+                genKey.Start();
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
         }
@@ -166,11 +197,11 @@ namespace Encryption
         {
             if (rsa.sign(txtTargetPath.Text))
             {
-                status.Text = Dict.SIGN_SUCCESSFUL;
+                lbStatus.Text = Dict.SIGN_SUCCESSFUL;
             }
             else
             {
-                status.Text = Dict.SIGN_FAILED;
+                lbStatus.Text = Dict.SIGN_FAILED;
             }
         }
 
@@ -178,12 +209,27 @@ namespace Encryption
         {
             if (rsa.verify(txtTargetPath.Text))
             {
-                status.Text = Dict.VERIFY_SUCCESSFUL;
+                lbStatus.Text = Dict.VERIFY_SUCCESSFUL;
             }
             else
             {
-                status.Text = Dict.VERIFY_FAILED;
+                lbStatus.Text = Dict.VERIFY_FAILED;
             }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            lbPercent.Text =  progress + "%";
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtN_TextChanged(object sender, EventArgs e)
+        {
+            lbKeySize.Text = rsa.getKeySize() + " Bits";
         }
     }
 }

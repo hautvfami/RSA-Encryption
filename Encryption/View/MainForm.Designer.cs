@@ -36,20 +36,23 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnKey = new System.Windows.Forms.Button();
             this.txtKeyPath = new System.Windows.Forms.TextBox();
-            this.txtTargetPath = new System.Windows.Forms.TextBox();
             this.btnTarget = new System.Windows.Forms.Button();
+            this.txtTargetPath = new System.Windows.Forms.TextBox();
             this.btnGenKey = new System.Windows.Forms.Button();
             this.btnVerify = new System.Windows.Forms.Button();
             this.btnSign = new System.Windows.Forms.Button();
             this.cbbKeySize = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.txtN = new System.Windows.Forms.TextBox();
+            this.lbModulus = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.status = new System.Windows.Forms.Label();
+            this.lbStatus = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnMini = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.ttGenerateKey = new System.Windows.Forms.ToolTip(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.lbPercent = new System.Windows.Forms.Label();
+            this.lbKeySize = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -95,9 +98,9 @@
             this.label1.ForeColor = System.Drawing.Color.Cornsilk;
             this.label1.Location = new System.Drawing.Point(13, 160);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 15);
+            this.label1.Size = new System.Drawing.Size(84, 15);
             this.label1.TabIndex = 3;
-            this.label1.Text = "PUBLIC KEY";
+            this.label1.Text = "PK Exponent";
             // 
             // btnKey
             // 
@@ -121,15 +124,6 @@
             this.txtKeyPath.TabIndex = 7;
             this.txtKeyPath.TextChanged += new System.EventHandler(this.txtKeyPath_TextChanged);
             // 
-            // txtTargetPath
-            // 
-            this.txtTargetPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtTargetPath.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTargetPath.Location = new System.Drawing.Point(167, 68);
-            this.txtTargetPath.Name = "txtTargetPath";
-            this.txtTargetPath.Size = new System.Drawing.Size(272, 22);
-            this.txtTargetPath.TabIndex = 9;
-            // 
             // btnTarget
             // 
             this.btnTarget.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -141,6 +135,15 @@
             this.btnTarget.Text = "Target";
             this.btnTarget.UseVisualStyleBackColor = true;
             this.btnTarget.Click += new System.EventHandler(this.btnTarget_Click);
+            // 
+            // txtTargetPath
+            // 
+            this.txtTargetPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtTargetPath.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTargetPath.Location = new System.Drawing.Point(167, 68);
+            this.txtTargetPath.Name = "txtTargetPath";
+            this.txtTargetPath.Size = new System.Drawing.Size(272, 22);
+            this.txtTargetPath.TabIndex = 9;
             // 
             // btnGenKey
             // 
@@ -188,18 +191,6 @@
             this.cbbKeySize.Size = new System.Drawing.Size(107, 22);
             this.cbbKeySize.TabIndex = 13;
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Font = new System.Drawing.Font("Consolas", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.label4.Location = new System.Drawing.Point(13, 244);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(77, 15);
-            this.label4.TabIndex = 17;
-            this.label4.Text = "N         ";
-            // 
             // txtN
             // 
             this.txtN.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -211,29 +202,43 @@
             this.txtN.Name = "txtN";
             this.txtN.Size = new System.Drawing.Size(505, 60);
             this.txtN.TabIndex = 16;
+            this.txtN.TextChanged += new System.EventHandler(this.txtN_TextChanged);
+            // 
+            // lbModulus
+            // 
+            this.lbModulus.AutoSize = true;
+            this.lbModulus.BackColor = System.Drawing.Color.Transparent;
+            this.lbModulus.Font = new System.Drawing.Font("Consolas", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbModulus.ForeColor = System.Drawing.Color.White;
+            this.lbModulus.Location = new System.Drawing.Point(13, 244);
+            this.lbModulus.Name = "lbModulus";
+            this.lbModulus.Size = new System.Drawing.Size(77, 15);
+            this.lbModulus.TabIndex = 17;
+            this.lbModulus.Text = "PK Modulus";
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.GrayText;
             this.panel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
             this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel1.Controls.Add(this.status);
+            this.panel1.Controls.Add(this.lbPercent);
+            this.panel1.Controls.Add(this.lbStatus);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel1.Location = new System.Drawing.Point(-4, 331);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(535, 24);
+            this.panel1.Size = new System.Drawing.Size(539, 24);
             this.panel1.TabIndex = 18;
             // 
-            // status
+            // lbStatus
             // 
-            this.status.AutoSize = true;
-            this.status.BackColor = System.Drawing.Color.Transparent;
-            this.status.Location = new System.Drawing.Point(73, 3);
-            this.status.Name = "status";
-            this.status.Size = new System.Drawing.Size(42, 14);
-            this.status.TabIndex = 7;
-            this.status.Text = "Ready";
+            this.lbStatus.AutoSize = true;
+            this.lbStatus.BackColor = System.Drawing.Color.Transparent;
+            this.lbStatus.Location = new System.Drawing.Point(73, 3);
+            this.lbStatus.Name = "lbStatus";
+            this.lbStatus.Size = new System.Drawing.Size(42, 14);
+            this.lbStatus.TabIndex = 10;
+            this.lbStatus.Text = "Ready";
             // 
             // label2
             // 
@@ -242,7 +247,7 @@
             this.label2.Location = new System.Drawing.Point(13, 3);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(56, 14);
-            this.label2.TabIndex = 6;
+            this.label2.TabIndex = 9;
             this.label2.Text = "STATUS:";
             // 
             // btnMini
@@ -275,23 +280,49 @@
             this.btnClose.Size = new System.Drawing.Size(24, 23);
             this.btnClose.TabIndex = 20;
             this.btnClose.UseVisualStyleBackColor = false;
-            this.btnClose.Click += new System.EventHandler(this.button2_Click);
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // ttGenerateKey
             // 
             this.ttGenerateKey.ToolTipTitle = "GUILD";
             // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // lbPercent
+            // 
+            this.lbPercent.AutoSize = true;
+            this.lbPercent.BackColor = System.Drawing.Color.Transparent;
+            this.lbPercent.Location = new System.Drawing.Point(490, 3);
+            this.lbPercent.Name = "lbPercent";
+            this.lbPercent.Size = new System.Drawing.Size(0, 14);
+            this.lbPercent.TabIndex = 11;
+            // 
+            // lbKeySize
+            // 
+            this.lbKeySize.AutoSize = true;
+            this.lbKeySize.BackColor = System.Drawing.Color.Transparent;
+            this.lbKeySize.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbKeySize.ForeColor = System.Drawing.Color.White;
+            this.lbKeySize.Location = new System.Drawing.Point(97, 245);
+            this.lbKeySize.Name = "lbKeySize";
+            this.lbKeySize.Size = new System.Drawing.Size(84, 15);
+            this.lbKeySize.TabIndex = 21;
+            this.lbKeySize.Text = "           ";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Encryption.Properties.Resources.slider_security;
+            this.BackgroundImage = global::Encryption.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(529, 350);
+            this.ClientSize = new System.Drawing.Size(531, 350);
+            this.Controls.Add(this.lbKeySize);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnMini);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.lbModulus);
             this.Controls.Add(this.txtN);
             this.Controls.Add(this.cbbKeySize);
             this.Controls.Add(this.btnSign);
@@ -310,6 +341,7 @@
             this.Opacity = 0.9D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Encryption";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
@@ -325,20 +357,24 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnKey;
         private System.Windows.Forms.TextBox txtKeyPath;
-        private System.Windows.Forms.TextBox txtTargetPath;
         private System.Windows.Forms.Button btnTarget;
+        private System.Windows.Forms.TextBox txtTargetPath;
         private System.Windows.Forms.Button btnGenKey;
         private System.Windows.Forms.Button btnVerify;
         private System.Windows.Forms.Button btnSign;
         private System.Windows.Forms.ComboBox cbbKeySize;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtN;
+        private System.Windows.Forms.Label lbModulus;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label status;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnMini;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.ToolTip ttGenerateKey;
+        private System.Windows.Forms.Label lbStatus;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label lbPercent;
+        private System.Windows.Forms.Label lbKeySize;
+
     }
 }
 

@@ -106,6 +106,23 @@ namespace Encryption.Util
 
 
         #region Random Number
+        public static BigInteger getPublicKey(int size, BigInteger n)
+        {
+            BigInteger rd;
+            byte[] byteArray = new byte[size / 8];
+            BitArray bits;
+
+            do
+            {
+                random.NextBytes(byteArray);
+                bits = new BitArray(byteArray);
+                bits.Set(size - 1, false);      // sign bit
+                bits.CopyTo(byteArray, 0);
+                rd = new BigInteger(byteArray);
+            } while (BigInteger.GreatestCommonDivisor(rd, n) != 1);
+
+            return rd;
+        }
         private static BigInteger getRandomNumber(int size)
         {
             BitArray bits;
