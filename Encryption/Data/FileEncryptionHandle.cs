@@ -1,4 +1,4 @@
-﻿using Encryption.Interfaces;
+﻿using Encryption.Algorithm;
 using Encryption.Util;
 using System;
 using System.Collections.Generic;
@@ -15,6 +15,7 @@ namespace Encryption.Data
         private byte[] buffer;
         private int bufferSize;
         private long readed;
+        private long numread;
 
         public FileEncryptionHandle(){ }
 
@@ -36,8 +37,8 @@ namespace Encryption.Data
                             // Count progress person
                             readed += bufferSize - 1;
                             progress = (int)(100.0 * readed / SourceReader.Length);
-
-                            encryption.encrypt(buffer).CopyTo(buffer,0);
+                            // Main encrypt file
+                            encryption.encrypt(ref buffer);
                             DestinationWriter.Write(buffer, 0, bufferSize);
                             System.Array.Clear(buffer, 0, bufferSize);
                         }
@@ -67,16 +68,18 @@ namespace Encryption.Data
                 {
                     using (FileStream DestinationWriter = File.OpenWrite(UserDirectory.Substring(0, UserDirectory.LastIndexOf("."))))
                     {
+                        Debug.showTime("Start");
                         while (SourceReader.Read(buffer, 0, bufferSize) != 0)
                         {
                             // Count progress person
                             readed += bufferSize;
                             progress = (int)(100.0 * readed / SourceReader.Length);
-
-                            encryption.decrypt(buffer).CopyTo(buffer,0);
+                            // Main decrypt file
+                            encryption.decrypt(ref buffer);//.CopyTo(buffer,0);
                             DestinationWriter.Write(buffer, 0, bufferSize - 1);
                             System.Array.Clear(buffer, 0, bufferSize);
                         }
+                        Debug.showTime("Finish");
                     }
                 }
                 //System.IO.File.Delete(UserDirectory);

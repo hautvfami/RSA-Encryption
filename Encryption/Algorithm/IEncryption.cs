@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Encryption.Interfaces
+namespace Encryption.Algorithm
 {
     interface IEncryption
     {
         //IEncryption getInstance();
         int getKeySize();
-        byte[] encrypt(byte[] plain);
-        byte[] decrypt(byte[] plain);
+        void encrypt(ref byte[] plain);
+        void decrypt(ref byte[] cipher);
 
         bool sign(string filePath);
         bool verify(string filePath);

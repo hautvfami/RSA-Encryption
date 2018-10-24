@@ -49,6 +49,10 @@
     <Compile Include="Data\Dict.cs" />
     <Compile Include="Data\FileEncryptionHandle.cs" />
     <Compile Include="Data\KeyStorage.cs" />
+    <Compile Include="Models\RSAPrivateKey.cs" />
+    <Compile Include="Models\RSAPublicKey.cs" />
+    <Compile Include="PKCS1\IPKCS1.cs" />
+    <Compile Include="PKCS1\RSA_PKCS1.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -60,9 +64,9 @@
     <Compile Include="View\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\Elgamar.cs" />
-    <Compile Include="Interfaces\IEncryption.cs" />
-    <Compile Include="Interfaces\RSA.cs" />
+    <Compile Include="Algorithm\Elgamar.cs" />
+    <Compile Include="Algorithm\IEncryption.cs" />
+    <Compile Include="Algorithm\RSA.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\Debug.cs" />

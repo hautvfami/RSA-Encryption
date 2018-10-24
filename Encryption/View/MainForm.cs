@@ -1,5 +1,5 @@
 ﻿using Encryption.Data;
-using Encryption.Interfaces;
+using Encryption.Algorithm;
 using Encryption.Util;
 using System;
 using System.Collections.Generic;

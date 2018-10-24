@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,23 +12,27 @@ namespace Encryption.Util
 {
     public class MathUlti
     {
-        private static Random random = new Random();
+        #region test
+        RSACryptoServiceProvider a = new RSACryptoServiceProvider();
+        private void test()
+        {
+        }
+        #endregion
 
+
+        private static Random random = new Random();
         #region Extends Aglogrith
         public static BigInteger fastExponent(BigInteger baseN, BigInteger index, BigInteger modulo)
         {
-            BigInteger result = 1;
+            BigInteger result = new BigInteger(1);
 
             while (index > 0)
             {
-                if ((index & 1) == 1)
-                {
-                    // multiply in this bit's contribution while using modulus to keep result small
-                    result = (result * baseN) % modulo;
-                }
+                // multiply in this bit's contribution while using modulus to keep result small
+                if ((index & 1) == 1) result = BigInteger.Remainder(BigInteger.Multiply(result, baseN), modulo);
                 // move to the next bit of the exponent, square (and mod) the base accordingly
                 index >>= 1;
-                baseN = (baseN * baseN) % modulo;
+                baseN = BigInteger.Remainder(BigInteger.Multiply(baseN, baseN), modulo);
             }
             return result;
         }
@@ -51,7 +56,6 @@ namespace Encryption.Util
             return y;
         }
         #endregion
-
 
         #region Prime Number
         public static BigInteger generatePrime(int size) // size%8==0
@@ -104,7 +108,6 @@ namespace Encryption.Util
         }
         #endregion
 
-
         #region Random Number
         public static BigInteger getPublicKey(int size, BigInteger n)
         {
@@ -138,5 +141,11 @@ namespace Encryption.Util
             return new BigInteger(byteArray);
         }
         #endregion
+
+        public static void swapBigInteger(ref BigInteger a, ref BigInteger b)
+        {
+            BigInteger c;
+            c = a; a = b; b = c;
+        }
     }
 }

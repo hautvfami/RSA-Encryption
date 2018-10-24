@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Encryption.Util;
-using Encryption.Interfaces;
+using Encryption.Algorithm;
 using System.Numerics;
 
 namespace EncryptionTest

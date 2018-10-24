@@ -11,7 +11,7 @@ using System.Security.Cryptography;
 using Encryption.Util;
 using System.Globalization;                       
 
-namespace Encryption.Interfaces
+namespace Encryption.Algorithm
 {
     class RSA : IEncryption
     {
@@ -20,6 +20,8 @@ namespace Encryption.Interfaces
         private BigInteger SECRET_KEY;
         private BigInteger p, q, n;
         public int KEY_SIZE;
+
+        BigInteger dP, dQ, qInv, m1, m2, h, m;
 
         //#region Singeton
         //private static RSA instance;
@@ -61,29 +63,41 @@ namespace Encryption.Interfaces
         {
             return SECRET_KEY != 0 ? true : false;
         }
-        public byte[] encrypt(byte[] plain)
+        public void encrypt(ref byte[] plain)
         {
-            //System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
-            //Debug.showLog("1",sw.ElapsedMilliseconds);
             BigInteger e = new BigInteger(plain);
-            //Debug.showLog("2", sw.ElapsedMilliseconds);
             BigInteger c = MathUlti.fastExponent(e, PUBLIC_KEY, N);
-            //Debug.showLog("3", sw.ElapsedMilliseconds);
             System.Array.Clear(plain, 0, plain.Length);
-            //Debug.showLog("4", sw.ElapsedMilliseconds);
             c.ToByteArray().CopyTo(plain, 0);
-            //Debug.showLog("5", sw.ElapsedMilliseconds);
-            //sw.Stop();
-            return plain;
         }
 
-        public byte[] decrypt(byte[] crypt)
+        public void decrypt(ref byte[] cipher)
         {
-            BigInteger c = new BigInteger(crypt);
-            BigInteger e = MathUlti.fastExponent(c, SECRET_KEY, N);
-            System.Array.Clear(crypt, 0, crypt.Length);
-            e.ToByteArray().CopyTo(crypt, 0);
-            return crypt;
+            #region Origin aglorigth
+            //BigInteger c = new BigInteger(crypt);
+            //BigInteger e = MathUlti.fastExponent(c, SECRET_KEY, N);
+            //System.Array.Clear(crypt, 0, crypt.Length);
+            //e.ToByteArray().CopyTo(crypt, 0);
+            //return crypt;
+            #endregion
+
+            //System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
+
+            //Chinese Remainder Theorem
+            BigInteger c = new BigInteger(cipher);
+            //Debug.showLog("1", sw.ElapsedMilliseconds);
+            m1 = MathUlti.fastExponent(c, dP, p);
+            //Debug.showLog("2", sw.ElapsedMilliseconds);
+            m2 = MathUlti.fastExponent(c, dQ, q);
+            //Debug.showLog("3", sw.ElapsedMilliseconds);
+            h = (m1 > m2) ? (qInv * (m1 - m2)) % p : ((qInv * (m1 - m2 + p)) % p);
+            m = m2 + (h * q);
+            //Debug.showLog("4", sw.ElapsedMilliseconds);
+            System.Array.Clear(cipher, 0, cipher.Length);
+            //Debug.showLog("5", sw.ElapsedMilliseconds);
+            m.ToByteArray().CopyTo(cipher, 0);
+            //Debug.showLog("6", sw.ElapsedMilliseconds);
+            //sw.Stop();
         }
 
         #region Sign-Verify
@@ -102,9 +116,8 @@ namespace Encryption.Interfaces
                 throw e;
             }
 
-            byte[] signOrigin;
-            signOrigin = encrypt(sign);
-            if (new BigInteger(hash) == new BigInteger(signOrigin)) return true;
+            encrypt(ref sign);
+            if (new BigInteger(hash) == new BigInteger(sign)) return true;
             return false;
         }
 
@@ -113,9 +126,9 @@ namespace Encryption.Interfaces
             byte[] hash = new byte[KEY_SIZE / 8];
             getHashSHA256(filePath).CopyTo(hash, 0);
 
-            byte[] sign = decrypt(hash);
+            decrypt(ref hash);
             using (Stream file = File.OpenWrite(filePath + ".sign"))
-                file.Write(sign, 0, sign.Length);
+                file.Write(hash, 0, hash.Length);
             return true;
         }
 
@@ -144,14 +157,18 @@ namespace Encryption.Interfaces
         {
             p = MathUlti.generatePrime(KEY_SIZE / 2);
             q = MathUlti.generatePrime(KEY_SIZE / 2);
+            if (p < q) MathUlti.swapBigInteger(ref p, ref q);
             N = BigInteger.Multiply(p, q);
             n = BigInteger.Multiply(p - 1, q - 1);
             PUBLIC_KEY = 65537;//MathUlti.getPublicKey(KEY_SIZE, n);
             SECRET_KEY = MathUlti.moduloInverse(PUBLIC_KEY, n);
 
-            Debug.showLog("p", p);
-            Debug.showLog("q", q);
-            Debug.showLog("n", n);
+            dP = MathUlti.moduloInverse(PUBLIC_KEY, p - 1);
+            dQ = MathUlti.moduloInverse(PUBLIC_KEY, q - 1);
+            qInv = MathUlti.moduloInverse(q, p);
+
+            Debug.showLog("dP", dP);
+            Debug.showLog("dQ", dQ);
             Debug.showLog("N", N);
             Debug.showLog("PUBLIC_KEY", PUBLIC_KEY);
             Debug.showLog("SECRET_KEY", SECRET_KEY);
@@ -171,14 +188,24 @@ namespace Encryption.Interfaces
                     {
                         switch (element[i])
                         {
-                            case "PUBLIC_KEY:": PUBLIC_KEY = BigInteger.Parse(element[++i], NumberStyles.AllowHexSpecifier); break;
-                            case "SECRET_KEY:": SECRET_KEY = BigInteger.Parse(element[++i], NumberStyles.AllowHexSpecifier); break;
-                            case "N:": N = BigInteger.Parse(element[++i], NumberStyles.AllowHexSpecifier); break;
+                            case "PUBLIC_KEY:": PUBLIC_KEY = BigInteger.Parse(element[i+1], NumberStyles.AllowHexSpecifier); break;
+                            case "SECRET_KEY:": SECRET_KEY = BigInteger.Parse(element[i+1], NumberStyles.AllowHexSpecifier); break;
+                            case "N:": N = BigInteger.Parse(element[i+1], NumberStyles.AllowHexSpecifier); break;
+                            // Chinese Remainder Theorem
+                            case "p:": p = BigInteger.Parse(element[i+1], NumberStyles.AllowHexSpecifier); break;
+                            case "q:": q = BigInteger.Parse(element[i+1], NumberStyles.AllowHexSpecifier); break;
                         }
                     }
+                    if (p < q) MathUlti.swapBigInteger(ref p, ref q);
+                    dP = MathUlti.moduloInverse(PUBLIC_KEY, p - 1);
+                    dQ = MathUlti.moduloInverse(PUBLIC_KEY, q - 1);
+                    qInv = MathUlti.moduloInverse(q, p);
+
                     KEY_SIZE = (N.ToByteArray().Length) * 8;
                 }
 
+                Debug.showLog("dP", dP);
+                Debug.showLog("dQ", dQ);
                 Debug.showLog("N", N);
                 Debug.showLog("KEY_SIZE", KEY_SIZE);
                 Debug.showLog("PUBLIC_KEY", PUBLIC_KEY);
@@ -203,7 +230,10 @@ namespace Encryption.Interfaces
                     ds.Write(
                         "PUBLIC_KEY:" + Environment.NewLine + PUBLIC_KEY.ToString("X") + Environment.NewLine +
                         "SECRET_KEY:" + Environment.NewLine + SECRET_KEY.ToString("X") + Environment.NewLine +
-                        "N:"          + Environment.NewLine + N.ToString("X")
+                        "N:" + Environment.NewLine + N.ToString("X") + Environment.NewLine +
+                        // Chinese Remainder Theorem
+                        "p:" + Environment.NewLine + p.ToString("X") + Environment.NewLine +
+                        "q:" + Environment.NewLine + q.ToString("X") + Environment.NewLine
                         );
                 }
                 return true;
