@@ -1,6 +1,7 @@
-#Ignore thumbnails created by Windows
-Thumbs.db
+#Ignore thumbnails created by Windows Thumbs.db
 #Ignore files built by Visual Studio
+*/bin/Debug/*
+*/obj/Debug/*
 *.user
 *.aps
 *.pch
@@ -19,14 +20,3 @@ Thumbs.db
 obj/
 [Rr]elease*/
 _ReSharper*/
-/Encryption/bin/Debug/Encryption.exe
-/Encryption/bin/Debug/Encryption.pdb
-/Encryption/Encryption.csproj
-/Encryption/obj/Debug/Encryption.csproj.GenerateResource.Cache
-/Encryption/obj/Debug/Encryption.exe
-/Encryption/obj/Debug/Encryption.pdb
-/Encryption/bin/Debug/Encryption.exe
-/Encryption/obj/Debug/Encryption.exe
-/Encryption/obj/Debug/Encryption.csproj.GenerateResource.Cache
-/Encryption/bin/Debug/Encryption.exe
-/Encryption/obj/Debug/Encryption.exe
